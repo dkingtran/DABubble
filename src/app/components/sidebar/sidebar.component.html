@@ -277,9 +277,9 @@
           <label for="channelName">{{ 'SIDEBAR.CHANNEL_NAME' | translate }}</label>
            <div class="ui-input-with-prefix">
              <app-svg-images class="hash ui-input-prefix" [iconName]="'tag'" [width]="'100%'" [height]="'100%'" [className]="'icon-colored'"></app-svg-images>
-             <input class="ui-input-rounded" type="text" id="channelName" [(ngModel)]="newChannelName" [placeholder]="'SIDEBAR.CHANNEL_NAME_PLACEHOLDER' | translate" />
+             <input class="ui-input-rounded" type="text" id="channelName" [(ngModel)]="newChannelName" [placeholder]="'SIDEBAR.CHANNEL_NAME_PLACEHOLDER' | translate" [class.input-error-border]="channelModalHelper.newChannelError" />
            </div>
-           <div *ngIf="channelModalHelper.newChannelError" class="input-error">{{ channelModalHelper.newChannelError }}</div>
+           <div class="input-error" [class.is-hidden]="!channelModalHelper.newChannelError" [attr.aria-hidden]="!channelModalHelper.newChannelError">{{ channelModalHelper.newChannelError }}</div>
         </div>
 
         <div class="form-group">
@@ -310,7 +310,7 @@
           </button>
         </div>
         <div class="add-people-body">
-          <div *ngIf="channelModalHelper.newChannelError" class="input-error" style="padding:0 1rem">{{ channelModalHelper.newChannelError }}</div>
+          <div class="input-error" style="padding:0 1rem" [class.is-hidden]="!channelModalHelper.newChannelError" [attr.aria-hidden]="!channelModalHelper.newChannelError">{{ channelModalHelper.newChannelError }}</div>
 
           <div class="add-people-options">
             <ng-container *ngIf="memberChannels.length">
