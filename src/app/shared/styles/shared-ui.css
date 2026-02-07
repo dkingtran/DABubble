@@ -448,9 +448,11 @@
     color: #E60000;
     margin-top: 0.5rem;
     margin-left: 1rem;
-    font-size: 1.142857rem; /* 16px when 14px = 1rem */
+    font-size: 1.142857rem;
+    /* 16px when 14px = 1rem */
     line-height: 1.2;
-    min-height: 1.4rem; /* reserve vertical space to avoid layout shift when toggling */
+    min-height: 1.4rem;
+    /* reserve vertical space to avoid layout shift when toggling */
     transition: opacity 120ms ease, visibility 120ms ease;
 }
 
@@ -467,7 +469,8 @@
 .ui-input-rounded.input-error {
     border-color: #E60000 !important;
     color: #E60000;
-    font-size: 1.142857rem; /* 16px when 14px = 1rem */
+    font-size: 1.142857rem;
+    /* 16px when 14px = 1rem */
 }
 
 .ui-input-rounded.input-error-field:focus,
