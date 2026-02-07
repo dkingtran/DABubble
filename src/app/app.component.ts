@@ -1,6 +1,8 @@
 import { Component, OnDestroy } from '@angular/core';
 import { NgIf } from '@angular/common';
 import { ActivatedRoute, NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { TranslateService } from '@ngx-translate/core';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { filter, Subscription } from 'rxjs';
@@ -87,12 +89,16 @@ export class AppComponent implements OnDestroy {
 
   private routerSub?: Subscription;
   private threadSub?: Subscription;
+  private langSub?: Subscription;
+  private currentTitleKey: string | null = null;
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private threadStateService: ThreadStateService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private titleService: Title,
+    private translate: TranslateService
   ) {
     this.updateVisibility(this.router.url);
 
@@ -103,11 +109,16 @@ export class AppComponent implements OnDestroy {
     this.threadSub = this.threadStateService.messageId$.subscribe(messageId => {
       this.isThreadOpen = !!messageId;
     });
+
+    this.langSub = this.translate.onLangChange.subscribe(() => {
+      this.applyTitle();
+    });
   }
 
   ngOnDestroy(): void {
     this.routerSub?.unsubscribe();
     this.threadSub?.unsubscribe();
+    this.langSub?.unsubscribe();
   }
 
   private updateVisibility(url: string): void {
@@ -118,6 +129,8 @@ export class AppComponent implements OnDestroy {
     while (currentRoute.firstChild) {
       currentRoute = currentRoute.firstChild;
     }
+    this.currentTitleKey = this.getRouteTitleKey(this.activatedRoute);
+    this.applyTitle();
     const hideHeaderFooter = currentRoute.snapshot.data['hideHeaderFooter'];
 
     if (hideHeaderFooter) {
@@ -127,7 +140,7 @@ export class AppComponent implements OnDestroy {
       return;
     }
 
-    const authGradientOn = ['/', '/login', '/signup', '/forgot-password'];
+    const authGradientOn = ['/', '/login', '/signup', '/forgot-password', '/reset-password'];
     this.useAuthGradient = this.matchesAnyPath(path, authGradientOn);
 
     const authFormPages = ['/login', '/signup'];
@@ -137,7 +150,7 @@ export class AppComponent implements OnDestroy {
     const hideHeaderOn = ['/', '/login', '/signup', '/forgot-password', '/reset-password', '/choose-avatar', '/imprint', '/privacy-policy'];
 
     // Footer should also be hidden on the dashboard view
-    const hideFooterOn = ['/dashboard', '/reset-password', '/choose-avatar', '/imprint', '/privacy-policy'];
+    const hideFooterOn = ['/dashboard', '/choose-avatar', '/imprint', '/privacy-policy'];
 
     this.showHeader = !this.matchesAnyPath(path, hideHeaderOn);
     this.showFooter = !this.matchesAnyPath(path, hideFooterOn);
@@ -151,6 +164,31 @@ export class AppComponent implements OnDestroy {
     return prefixes.some(prefix => {
       if (prefix === '/') return path === '/';
       return path === prefix || path.startsWith(`${prefix}/`);
+    });
+  }
+
+  private getRouteTitleKey(route: ActivatedRoute): string | null {
+    let current = route;
+    let title: string | null = null;
+
+    while (current.firstChild) {
+      if (current.snapshot.data['titleKey']) {
+        title = current.snapshot.data['titleKey'];
+      }
+      current = current.firstChild;
+    }
+
+    if (current.snapshot.data['titleKey']) {
+      title = current.snapshot.data['titleKey'];
+    }
+
+    return title;
+  }
+
+  private applyTitle(): void {
+    const titleKey = this.currentTitleKey || 'TITLE.APP';
+    this.translate.get(titleKey).subscribe(title => {
+      this.titleService.setTitle(title);
     });
   }
 }

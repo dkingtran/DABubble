@@ -3,6 +3,20 @@
     "NEW_TO_DABUBBLE": "New to DABubble?",
     "CREATE_ACCOUNT": "Create account"
   },
+  "TITLE": {
+    "APP": "DABubble",
+    "LOGIN": "DABubble - Login",
+    "SIGNUP": "DABubble - Signup",
+    "DASHBOARD": "DABubble - Dashboard",
+    "FORGOT_PASSWORD": "DABubble - Reset Password",
+    "RESET_PASSWORD": "DABubble - New Password",
+    "CHOOSE_AVATAR": "DABubble - Choose Avatar",
+    "INTRO": "DABubble - Intro",
+    "IMPRINT": "DABubble - Imprint",
+    "PRIVACY_POLICY": "DABubble - Privacy Policy",
+    "SETTINGS": "DABubble - Settings",
+    "NOT_FOUND": "DABubble - Page Not Found"
+  },
   "LOGIN": {
     "TITLE": "Login",
     "SUBTITLE": "We recommend using the email address you use at work.",
