@@ -8,8 +8,10 @@ import {
   signInWithPopup,
   sendPasswordResetEmail,
   confirmPasswordReset,
-  verifyPasswordResetCode
+  verifyPasswordResetCode,
+  ActionCodeSettings
 } from 'firebase/auth';
+import { environment } from '../../environments/environment';
 import { FirebaseService } from './firebase.service';
 import { UserService } from './user.service';
 import { ChannelService } from './channel.service';
@@ -215,7 +217,11 @@ export class AuthService {
    */
   async sendPasswordResetEmail(email: string) {
     try {
-      await sendPasswordResetEmail(this.firebaseService.auth, email);
+      const actionCodeSettings: ActionCodeSettings = {
+        url: environment.resetPasswordUrl,
+        handleCodeInApp: true,
+      };
+      await sendPasswordResetEmail(this.firebaseService.auth, email, actionCodeSettings);
       return { success: true, message: 'Reset-Email wurde gesendet' };
     } catch (error: any) {
       return { success: false, message: this.getErrorMessage(error.code) };
